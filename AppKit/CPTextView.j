@@ -310,8 +310,7 @@ var kDelegateRespondsTo_textShouldBeginEditing                                  
     if (isAttributed)
         [_textStorage replaceCharactersInRange: CPCopyRange(_selectionRange) withAttributedString:aString];
     else
-    {
-		[_textStorage replaceCharactersInRange: CPCopyRange(_selectionRange) withString: aString];
+    {	[_textStorage replaceCharactersInRange: CPCopyRange(_selectionRange) withString: aString];
 	}
     [self setSelectedRange:CPMakeRange(_selectionRange.location + [string length], 0)];
 

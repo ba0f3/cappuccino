@@ -543,8 +543,9 @@ var _objectsInRange = function(aList, aRange)
 }
 
 - (void) _removeInvalidLineFragments
-{	if  (_removeInvalidLineFragmentsRange&& _removeInvalidLineFragmentsRange.length)    
-    {	[_lineFragments removeObjectsInRange: _removeInvalidLineFragmentsRange];
+{	if  (_removeInvalidLineFragmentsRange&& _removeInvalidLineFragmentsRange.length && _lineFragments.length)    
+    {
+		[_lineFragments removeObjectsInRange: _removeInvalidLineFragmentsRange];
 	}
 
 }
@@ -556,7 +557,6 @@ var _objectsInRange = function(aList, aRange)
     var startIndex = CPNotFound,
         removeRange = CPMakeRange(0,0);
 
-//_lineFragments=[];    
 	var l=_lineFragments.length;
     if (l)
     {
