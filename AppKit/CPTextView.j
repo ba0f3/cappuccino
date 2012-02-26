@@ -99,7 +99,9 @@ var kDelegateRespondsTo_textShouldBeginEditing                                  
     
     CPSize _minSize;
     CPSize _maxSize;
-    
+
+	BOOL	_scrollingDownward;
+
     /* use bit mask ? */
     BOOL _isRichText;
     BOOL _usesFontPanel;
@@ -439,7 +441,6 @@ var kDelegateRespondsTo_textShouldBeginEditing                                  
 	{
 		rects[i].origin.x += _textContainerOrigin.x;
 		rects[i].origin.y += _textContainerOrigin.y;
-document.title="range";
 		[self setNeedsDisplayInRect:rects[i]];
 	}
 }
@@ -453,16 +454,19 @@ document.title="range";
     point.x -= _textContainerOrigin.x;
     point.y -= _textContainerOrigin.y;
     
-    var index = [_layoutManager glyphIndexForPoint:point inTextContainer:_textContainer fractionOfDistanceThroughGlyph:fraction];
-    if (index == CPNotFound)
-        index = [_textStorage length];
+ 	var oldRange=[self selectedRange];
+
+	var index = [_layoutManager glyphIndexForPoint:point inTextContainer:_textContainer fractionOfDistanceThroughGlyph:fraction];
+    if ( index == CPNotFound)
+        index = _scrollingDownward? CPMaxRange(oldRange): oldRange.location;
  
-	var oldRange=[self selectedRange];
 	if (index> oldRange.location)
 	{	[self _clearRange: MakeRangeFromAbs(oldRange.location,index) ];
+		_scrollingDownward=YES;
 	}
 	if(index< CPMaxRange(oldRange) )
 	{	[self _clearRange: MakeRangeFromAbs(index, CPMaxRange(oldRange)) ];
+		_scrollingDownward=NO;
 	}
 
     if (index < _startTrackingLocation)
