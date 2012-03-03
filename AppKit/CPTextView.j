@@ -302,7 +302,6 @@ var kDelegateRespondsTo_textShouldBeginEditing                                  
 - (void)insertText:(id)aString
 {
 
-
     var isAttributed = [aString isKindOfClass:CPAttributedString],
         string = (isAttributed)?[aString string]:aString;
 
@@ -481,6 +480,33 @@ var kDelegateRespondsTo_textShouldBeginEditing                                  
     /* will post CPTextViewDidChangeSelectionNotification */
     [self setSelectedRange:[self selectedRange] affinity:0 stillSelecting:NO];
 }
+
+- (void)moveDown:(id)sender
+{	if (_isSelectable)
+    {   var fraction = [];
+		var sindex = CPMaxRange([self selectedRange]);
+        var point = [_layoutManager locationForGlyphAtIndex: sindex];
+		var rect=   [_layoutManager lineFragmentRectForGlyphAtIndex: sindex effectiveRange:NULL];
+		point.y+=2+rect.size.height;
+		point.x+=2;
+		var dindex= [_layoutManager glyphIndexForPoint: point inTextContainer:_textContainer fractionOfDistanceThroughGlyph:fraction];
+		[self setSelectedRange: CPMakeRange(dindex,0) ];
+		[self scrollRangeToVisible: CPMakeRange(dindex, 0)]
+    }
+}
+- (void)moveUp:(id)sender
+{	if (_isSelectable)
+    {   var fraction = [];
+		var sindex = [self selectedRange].location;
+        var point = [_layoutManager locationForGlyphAtIndex: sindex];
+		point.y-=2;
+		point.x+=2;
+		var dindex= [_layoutManager glyphIndexForPoint: point inTextContainer:_textContainer fractionOfDistanceThroughGlyph:fraction];
+		[self setSelectedRange: CPMakeRange(dindex,0) ];
+		[self scrollRangeToVisible: CPMakeRange(dindex, 0)]
+    }
+}
+
 
 - (void)moveLeft:(id)sender
 {
