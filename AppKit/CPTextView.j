@@ -193,6 +193,20 @@ var kDelegateRespondsTo_textShouldBeginEditing                                  
             _delegateRespondsToSelectorMask |= kDelegateRespondsTo_textView_shouldChangeTypingAttributes_toAttributes;
     }
 }
+- (CPString)string
+{	return [_textStorage string];
+}
+- (void)setString:(CPString)aString
+{	[_textStorage replaceCharactersInRange: CPMakeRange(0, [[self string] length]) withString:aString];
+    [self didChangeText];
+    [self sizeToFit];
+    [self scrollRangeToVisible:_selectionRange];
+}
+// KVO support
+-(void)setValue:someVal
+{	[self setString: [someVal description]]
+}
+-(id)value {[self string]}
 
 - (void)setTextContainer:(CPTextContainer)aContainer
 {
